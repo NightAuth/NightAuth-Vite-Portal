@@ -1,0 +1,81 @@
+/* NightAuth customer portal look. `--accent` is the app's portal colour
+   (set from /api/customer/info); every tint below derives from it the way the
+   built-in portal appends alpha to the hex (e.g. `${hex}12`). */
+:root {
+  --accent: #3b82f6;
+  color-scheme: dark;
+}
+
+body {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  background-color: #060608;
+  color: #fff;
+}
+.font-mono,
+code {
+  font-family: "Geist Mono", ui-monospace, monospace;
+}
+
+.ac-text { color: var(--accent); }
+.ac-dot { background-color: var(--accent); }
+.ac-bg-06 { background-color: color-mix(in srgb, var(--accent) 2.4%, transparent); }
+.ac-bg-08 { background-color: color-mix(in srgb, var(--accent) 3.1%, transparent); }
+.ac-bg-0e { background-color: color-mix(in srgb, var(--accent) 5.5%, transparent); }
+.ac-bg-12 { background-color: color-mix(in srgb, var(--accent) 7.1%, transparent); }
+.ac-bg-15 { background-color: color-mix(in srgb, var(--accent) 8.2%, transparent); }
+.ac-bg-18 { background-color: color-mix(in srgb, var(--accent) 9.4%, transparent); }
+.ac-bg-20 { background-color: color-mix(in srgb, var(--accent) 12.5%, transparent); }
+.ac-border-15 { border-color: color-mix(in srgb, var(--accent) 8.2%, transparent); }
+.ac-border-18 { border-color: color-mix(in srgb, var(--accent) 9.4%, transparent); }
+.ac-border-20 { border-color: color-mix(in srgb, var(--accent) 12.5%, transparent); }
+.ac-border-25 { border-color: color-mix(in srgb, var(--accent) 14.5%, transparent); }
+.ac-border-30 { border-color: color-mix(in srgb, var(--accent) 18.8%, transparent); }
+.ac-border-35 { border-color: color-mix(in srgb, var(--accent) 20.8%, transparent); }
+.ac-glow { box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 8.2%, transparent); }
+.ac-hero { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 3.9%, transparent) 0%, rgba(255, 255, 255, 0.015) 60%); }
+.ac-progress { background-color: var(--accent); }
+
+/* Primary gradient button. */
+.ac-btn {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 93%, transparent), color-mix(in srgb, var(--accent) 73%, transparent));
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--accent) 27%, transparent), 0 1px 2px color-mix(in srgb, var(--accent) 12.5%, transparent);
+}
+.ac-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Pill tab (sign-in method switcher and dashboard tabs). */
+.ac-tab { color: #71717a; border: 1px solid transparent; }
+.ac-tab[aria-selected="true"] {
+  color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent) 12.5%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 20.8%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 12.5%, transparent);
+}
+
+.na-input {
+  height: 2.75rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 0 0.875rem 0 2.5rem;
+  font-size: 0.875rem;
+  color: #fff;
+  outline: none;
+  transition: border-color 150ms;
+}
+.na-input.no-icon { padding-left: 0.875rem; }
+.na-input::placeholder { color: #3f3f46; }
+.na-input:focus { border-color: rgba(255, 255, 255, 0.2); }
+.na-input:disabled { opacity: 0.4; }
+.na-field-icon { position: absolute; left: 0.875rem; top: 0.875rem; color: #52525b; pointer-events: none; transition: color 150ms; }
+.group:focus-within .na-field-icon { color: #a1a1aa; }
+.na-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; }
+
+.toast { animation: toast-in 200ms ease-out; }
+.toast-out { opacity: 0; transform: translateY(6px); transition: all 250ms; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.na-skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.07), rgba(255,255,255,0.03)); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+[hidden] { display: none !important; }

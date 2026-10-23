@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>NightAuth Customer Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles/portal.css" />
+  </head>
+  <body class="min-h-screen antialiased" data-title-key="dashboardLabel">
+    <div class="min-h-screen bg-[#060608] text-white flex flex-col relative overflow-hidden">
+      <svg
+        id="grid"
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-x-0 inset-y-[-30%] h-[200%] w-full skew-y-12 fill-gray-400/30 stroke-gray-400/30 text-gray-400/30 [mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
+      >
+        <defs>
+          <pattern id="grid-cell" width="40" height="40" patternUnits="userSpaceOnUse" x="-1" y="-1">
+            <path d="M.5 40V.5H40" fill="none" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid-cell)" />
+        <svg x="-1" y="-1" class="overflow-visible" data-squares></svg>
+      </svg>
+
+      <main class="flex-1 flex flex-col items-center justify-center px-4 py-12 relative z-10">
+        
+  <div class="w-full max-w-xl">
+    <!-- Loading skeleton -->
+    <div id="dash-loading" class="space-y-4">
+      <div class="na-skeleton h-[74px] rounded-2xl"></div>
+      <div class="na-skeleton h-[96px] rounded-2xl"></div>
+      <div class="na-skeleton h-[52px] rounded-2xl"></div>
+      <div class="na-skeleton h-[320px] rounded-2xl"></div>
+    </div>
+
+    <div id="dash" hidden class="space-y-4">
+      <!-- Header -->
+      <div class="rounded-2xl border ac-border-20 p-4 flex items-center justify-between gap-3 bg-white/[0.02] backdrop-blur-2xl shadow-xl relative z-20">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="size-10 rounded-xl border ac-border-30 ac-bg-12 flex items-center justify-center overflow-hidden p-1 flex-shrink-0" data-app-logo>
+            <span data-icon="shield" class="size-5 ac-text"></span>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-black tracking-tight text-white truncate" data-app-name></span>
+              <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-md font-mono border flex-shrink-0 ac-bg-12 ac-text ac-border-25" data-app-version></span>
+            </div>
+            <span class="text-[11px] text-zinc-500 font-medium truncate" data-i18n="dashboardLabel">Dashboard</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <a data-support-link hidden target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs font-bold text-zinc-300 hover:text-white hover:bg-white/[0.08] hover:border-white/15 transition">
+            <span data-icon="shield" class="size-3.5 ac-text"></span>
+            <span data-i18n="supportButton">Support</span>
+          </a>
+          <div data-lang-dropdown></div>
+        </div>
+      </div>
+
+      <!-- User hero -->
+      <div class="ac-hero rounded-2xl border border-white/[0.06] p-5 bg-white/[0.02] backdrop-blur-2xl shadow-xl flex items-center justify-between gap-4">
+        <div class="flex items-center gap-4 min-w-0 flex-1">
+          <div class="size-14 rounded-2xl border ac-border-30 ac-bg-12 flex items-center justify-center flex-shrink-0 overflow-hidden" data-user-avatar></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="text-lg font-extrabold text-white tracking-tight truncate" data-user-name></h1>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border flex-shrink-0 ac-bg-12 ac-border-25 ac-text" data-user-status></span>
+            </div>
+            <p class="text-sm text-zinc-500 mt-0.5 truncate" data-user-email></p>
+          </div>
+        </div>
+        <button type="button" id="logout"
+          class="flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/20 bg-rose-500/[0.08] text-xs font-bold text-rose-400 hover:bg-rose-500/15 hover:border-rose-500/30 transition cursor-pointer shadow-sm">
+          <span data-icon="log-out" class="size-3.5"></span>
+          <span data-i18n="logoutButton">Logout</span>
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div id="tabs" role="tablist" class="rounded-2xl border border-white/[0.06] p-1.5 grid bg-white/[0.02] backdrop-blur-2xl shadow-xl"></div>
+
+      <!-- Tab content -->
+      <div id="tab-content" class="rounded-2xl border ac-border-15 bg-white/[0.015] backdrop-blur-2xl shadow-2xl overflow-hidden"></div>
+    </div>
+  </div>
+
+  <!-- Renew / activate license -->
+  <div id="renew-modal" hidden class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-zinc-950/95 shadow-2xl backdrop-blur-xl overflow-hidden">
+      <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-white/[0.06]">
+        <div>
+          <p class="text-sm font-extrabold text-white" data-i18n="renewModalTitle"></p>
+          <p class="text-xs text-zinc-500 mt-0.5" data-i18n="renewModalDesc"></p>
+        </div>
+        <button type="button" data-close-modal class="text-zinc-500 hover:text-zinc-200 transition cursor-pointer p-1 rounded-lg hover:bg-white/[0.04]" aria-label="Close"><span data-icon="x" class="size-4"></span></button>
+      </div>
+      <form id="renew-form" class="p-5 space-y-4" novalidate>
+        <div class="space-y-2">
+          <label for="renew-key" class="text-xs font-bold text-zinc-300" data-i18n="licenseKeyInputLabel"></label>
+          <input id="renew-key" type="text" autocomplete="off" class="na-input no-icon h-10 rounded-lg font-mono text-xs" data-i18n-placeholder="licenseKeyInputPlaceholder" />
+          <p class="text-[11px] text-zinc-500" data-i18n="licenseDurationNotice"></p>
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" data-close-modal class="px-4 py-2 rounded-lg border border-white/10 bg-white/[0.02] text-xs font-bold text-zinc-400 hover:bg-white/[0.05] transition cursor-pointer" data-i18n="cancelButton"></button>
+          <button type="submit" class="ac-btn px-4 py-2 rounded-lg text-xs font-bold text-white transition flex items-center gap-2 cursor-pointer">
+            <span data-icon="check" class="size-3.5"></span>
+            <span data-i18n="activateLicenseButton"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2FA setup -->
+  <div id="setup-modal" hidden class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-zinc-950/95 shadow-2xl backdrop-blur-xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div class="flex items-center gap-2.5">
+          <div class="size-7 rounded-lg flex items-center justify-center ac-bg-18"><span data-icon="shield-check" class="size-4 ac-text"></span></div>
+          <div>
+            <p class="text-xs font-extrabold text-white" data-i18n="setup2faTitle"></p>
+            <p class="text-[10px] text-zinc-500" data-setup-step-label></p>
+          </div>
+        </div>
+        <button type="button" data-close-modal class="text-zinc-500 hover:text-zinc-200 transition cursor-pointer p-1 rounded-lg hover:bg-white/[0.04]" aria-label="Close"><span data-icon="x" class="size-4"></span></button>
+      </div>
+      <div class="h-0.5 bg-white/[0.04]"><div class="h-full ac-progress transition-all duration-500" data-setup-progress style="width:33%"></div></div>
+      <div class="p-5 space-y-4">
+        <div data-setup="loading" class="flex flex-col items-center justify-center py-10 gap-3">
+          <span data-icon="loader-circle" class="size-8 animate-spin ac-text"></span>
+          <p class="text-xs text-zinc-500" data-i18n="verifyingButton"></p>
+        </div>
+        <div data-setup="qr" hidden class="space-y-4">
+          <p class="text-xs text-zinc-400 leading-relaxed" data-i18n="scanQrInstruction"></p>
+          <div class="flex justify-center"><div class="p-3 bg-white rounded-xl"><img data-setup-qr alt="TOTP QR code" width="160" height="160" class="size-40 rounded-lg" /></div></div>
+          <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 space-y-1.5">
+            <p class="text-[10px] font-bold uppercase tracking-wider text-zinc-500" data-i18n="manualEntryKey"></p>
+            <div class="flex items-center gap-2">
+              <p class="font-mono text-xs text-zinc-200 flex-1 break-all leading-relaxed" data-setup-secret></p>
+              <button type="button" data-copy-secret class="text-zinc-500 hover:text-zinc-200 transition flex-shrink-0 cursor-pointer p-1.5 rounded-lg hover:bg-white/[0.04]" aria-label="Copy"><span data-icon="copy" class="size-3.5"></span></button>
+            </div>
+          </div>
+          <button type="button" data-setup-next class="ac-btn w-full h-10 rounded-xl font-bold text-sm text-white cursor-pointer" data-i18n="nextStepButton"></button>
+        </div>
+        <div data-setup="confirm" hidden class="space-y-4">
+          <p class="text-xs text-zinc-400" data-i18n="enter6DigitInstruction"></p>
+          <input data-setup-code type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" data-i18n-placeholder="sixDigitPlaceholder"
+            class="na-input no-icon h-14 text-center text-2xl font-mono font-black tracking-[0.5em]" />
+          <div class="flex gap-2">
+            <button type="button" data-setup-back class="flex-1 h-10 rounded-xl font-bold text-sm text-zinc-400 border border-white/[0.06] hover:bg-white/[0.04] transition cursor-pointer" data-i18n="cancelButton"></button>
+            <button type="button" data-setup-confirm disabled class="ac-btn flex-1 h-10 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 cursor-pointer"><span data-i18n="confirm2faButton"></span></button>
+          </div>
+        </div>
+        <div data-setup="backup" hidden class="space-y-4">
+          <div class="flex items-center gap-2 text-emerald-400">
+            <span data-icon="circle-check" class="size-5"></span>
+            <span class="text-sm font-extrabold" data-i18n="backupCodesTitle"></span>
+          </div>
+          <p class="text-xs text-zinc-400 leading-relaxed" data-i18n="backupCodesInstruction"></p>
+          <div class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 grid grid-cols-2 gap-2" data-backup-codes></div>
+          <button type="button" data-copy-codes class="w-full h-10 rounded-xl font-bold text-sm border border-white/[0.06] text-zinc-300 hover:bg-white/[0.04] transition flex items-center justify-center gap-2 cursor-pointer">
+            <span data-icon="copy" class="size-3.5"></span><span data-i18n="copyAllCodesButton"></span>
+          </button>
+          <button type="button" data-setup-done class="ac-btn w-full h-10 rounded-xl font-bold text-sm text-white cursor-pointer" data-i18n="doneButton"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2FA disable -->
+  <div id="disable-modal" hidden class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-zinc-950/95 shadow-2xl backdrop-blur-xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div class="flex items-center gap-2.5">
+          <div class="size-7 rounded-lg flex items-center justify-center bg-rose-500/[0.12]"><span data-icon="shield-off" class="size-4 text-rose-400"></span></div>
+          <div>
+            <p class="text-xs font-extrabold text-white" data-i18n="disable2faTitle"></p>
+            <p class="text-[10px] text-zinc-500" data-i18n="disable2faSubtitle"></p>
+          </div>
+        </div>
+        <button type="button" data-close-modal class="text-zinc-500 hover:text-zinc-200 transition cursor-pointer p-1 rounded-lg hover:bg-white/[0.04]" aria-label="Close"><span data-icon="x" class="size-4"></span></button>
+      </div>
+      <form id="disable-form" class="p-5 space-y-4" novalidate>
+        <div class="flex items-start gap-3 p-3 rounded-xl bg-rose-500/[0.08] border border-rose-500/[0.15]">
+          <span data-icon="circle-alert" class="size-4 text-rose-400 mt-0.5 flex-shrink-0"></span>
+          <p class="text-xs text-rose-300 leading-relaxed" data-i18n="disable2faSubtitle"></p>
+        </div>
+        <div class="space-y-1.5">
+          <label for="disable-password" class="na-label" data-i18n="enterPasswordToDisable"></label>
+          <div class="relative">
+            <input id="disable-password" type="password" autocomplete="current-password" placeholder="••••••••" class="na-input" />
+            <span data-icon="lock" class="size-4 na-field-icon"></span>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <label for="disable-code" class="na-label" data-i18n="enterCodeStep"></label>
+          <input id="disable-code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" data-i18n-placeholder="sixDigitPlaceholder"
+            class="na-input no-icon text-center text-lg font-mono font-black tracking-[0.4em]" />
+        </div>
+        <button type="submit" disabled class="w-full h-11 rounded-xl font-bold text-sm text-rose-400 border border-rose-500/20 bg-rose-500/[0.08] hover:bg-rose-500/15 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50">
+          <span data-icon="shield-off" class="size-4"></span><span data-i18n="disable2faButton"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+      </main>
+
+      <footer class="relative z-10 pb-6 text-center text-[11px] text-zinc-600" data-i18n="poweredBy">Powered by NightAuth</footer>
+    </div>
+
+    <script type="module" src="/src/pages/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+services:
+  nightauth-vite-portal:
+    build: .
+    container_name: nightauth-vite-portal
+    restart: unless-stopped
+    ports:
+      - "4321:4321"
+    env_file:
+      - .env

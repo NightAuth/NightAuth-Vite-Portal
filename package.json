@@ -1,0 +1,37 @@
+{
+  "name": "@nightauth/portal-vite",
+  "version": "1.0.0",
+  "description": "Official NightAuth Custom Customer Portal Template built with Vite and TailwindCSS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "nightauth",
+    "customer-portal",
+    "vite",
+    "tailwindcss",
+    "authentication",
+    "licensing",
+    "self-hosted",
+    "i18n"
+  ],
+  "author": "NightAuth",
+  "license": "Elastic-2.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "dependencies": {
+    "libsodium-wrappers": "0.8.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.14"
+  }
+}
